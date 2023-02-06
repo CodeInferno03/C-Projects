@@ -1,0 +1,11 @@
+HP% 5 8
+HP 135 375
+DEF% 5 8
+DEF 10 20
+ATK% 5 8
+ATK 10 20
+SPD 4 6
+Accuracy 4 8
+Resistance 4 8
+CRI_RATE% 4 6
+CRI_DMG% 4 7
