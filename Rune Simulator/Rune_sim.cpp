@@ -31,6 +31,9 @@ Array format ([element number] - value):
 */
 pair<string, int> rune[6]; 
 
+// a condition to check if SPD is a substat in the rune or not
+int speed_check = 0;
+
 // function to retrieve the rune values from Rune_stats.txt into an unordered_map for 0(1) time value retrieval
 /*
 Variables:
@@ -127,7 +130,6 @@ void rune_generator(int length)
                     continue;
                 else break;
             }
-            cout << "nice\n";
             break;
         
         default:
@@ -141,7 +143,8 @@ void rune_generator(int length)
     rune[1] = stat;
 
     for (int stat_count = 2; stat_count < 6; stat_count++)
-    {
+    {   
+        // the range of values from which the substat is picked (max value - min value from the list)
         int val_range;
 
         // picks a substat, and keeps picking if it selects a restricted substat or the same as the mainstat
@@ -154,19 +157,68 @@ void rune_generator(int length)
         }
 
         // picks the value of substat
-        val_range = rune_vals[stat.first].first - rune_vals[stat.first].second + 1;
+        val_range = rune_vals[stat.first].second - rune_vals[stat.first].first + 1;
         stat.second = rand() % val_range + rune_vals[stat.first].first;
+
+        // if SPD is a substat, then increment speed check
+        if (stat.first == "SPD") speed_check++;
 
         // adding the substat to the rune
         rune[stat_count].first = stat.first;
         rune[stat_count].second = stat.second;
     }
-    return;
+}
+
+/*
+This function powers up the rune 4 times, each time upgrading one sub stat. The goal is to get quad rolls
+i.e. one stat rolling 4 times (ideally speed.) should it quad roll, we increment a quad roll counter
+Variables: 
+quad_count: tracks the number of quad rolls
+*/
+// YET TO FINISH FUNCTION
+int Rune_powerup(int quad_count)
+{   
+    int val_range; // the range of value from which a substat can be upgraded
+    int value; // the substat to be upgraded, chooses from 1-4.
+    int stat_val; // the final value of the selected substat so it can be powered up
+    string stat_name; // the name of the substat to be powered up, so it can be accessed from the list
+    int val_count[4]; // checks which substat was found each time to check for quads
+
+    // loop to find and add the substat to the rune
+    for (int powerup = 1; powerup <= 4; powerup++)
+    {   
+        // picks a substat from 1 to 4
+        value = rand() % 4 + 1;
+
+        // checks
+        val_count[powerup-1] = value;
+        if (powerup-1 > 0){
+            if (val_count[powerup-1] != val_count[powerup-2]) break;
+        }
+
+        // finds the substat in the rune so that the name can be obtained
+        stat_name = rune[value+1].first;
+
+        // finds the value of the substat so it can be added
+        val_range = rune_vals[stat_name].second - rune_vals[stat_name].first + 1;
+        stat_val = rand() % val_range + rune_vals[stat_name].first;
+
+        // adds the found value to the stat
+        rune[value+1].second = rune[value+1].second + stat_val; 
+        
+    }
+
+
+    return quad_count;
 }
 
 int main()
 {   
     string filename = "Rune_stats.txt";
+
+    
+    int quad_count = 0; // tracks the number of quad speed runes
+    int rune_count = 0; // tracks the total number of runes
     
     /*
     Eventually, over here, add a part that allows people to choose what stat they want to roll, and how many trials of it
@@ -189,6 +241,9 @@ int main()
 
     // creates a rune
     rune_generator(length); 
+
+    for (int x = 0; x < 6; x++)
+        cout << rune[x].first << ": " << rune[x].second << endl;
  
 
     return 0;
