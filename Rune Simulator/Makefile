@@ -1,14 +1,14 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++11
 
-OBJECTS = Rune_trial.o
+OBJECTS = Rune_sim.o
 
-Rune_trial: $(OBJECTS)
-	$(CXX) -g $(CXXFLAGS) -o Rune_trial Rune_trial.o
+Rune_sim: $(OBJECTS)
+	$(CXX) -g $(CXXFLAGS) -o Rune_sim Rune_sim.o
 
-Rune_trial.o: Rune_trial.cpp 
-	$(CXX) -g $(CXXFLAGS) -c Rune_trial.cpp
+Rune_trial.o: Rune_sim.cpp 
+	$(CXX) -g $(CXXFLAGS) -c Rune_sim.cpp
 
 clean:
 	rm -f *.o
-	rm Rune_trial
+	rm Rune_sim

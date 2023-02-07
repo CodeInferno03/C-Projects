@@ -64,7 +64,6 @@ void rune_generator(int length)
     string mainstat; // main stat of the rune
     pair<string, int> stat; // saves each of the 4 substats and the slot/mainstat one after another
     int slot = rand() % 7 + 1; // picks the rune's slot
-    int stat_val; // picks the value of the substat
 
     pair<string, string> restricted; // restricted substats for certain slots
 
@@ -76,6 +75,11 @@ void rune_generator(int length)
     stat.second = slot;
     rune[0] = stat;
 
+    /*
+    Selects the main stat of the rune based on the slot.
+    There are certain restricted main stats based on the slots, and restricted tracks those for slots 1,3,5
+    for the rest we keep picking until we get a viable one
+    */
     switch(slot)
     {
         case 1:
@@ -123,10 +127,12 @@ void rune_generator(int length)
                     continue;
                 else break;
             }
+            cout << "nice\n";
             break;
         
         default:
             cout << "How the hell did this trigger??????\n";
+            break;
     }
 
     // adding the main stat to the rune array
@@ -134,8 +140,27 @@ void rune_generator(int length)
     stat.second = 0;
     rune[1] = stat;
 
+    for (int stat_count = 2; stat_count < 6; stat_count++)
+    {
+        int val_range;
 
+        // picks a substat, and keeps picking if it selects a restricted substat or the same as the mainstat
+        while (1)
+        {
+            stat.first = rune_statnames.at(rand() % val);
+            if (stat.first == restricted.first || stat.first == restricted.second || 
+            stat.first == mainstat) continue;
+            else break;    
+        }
 
+        // picks the value of substat
+        val_range = rune_vals[stat.first].first - rune_vals[stat.first].second + 1;
+        stat.second = rand() % val_range + rune_vals[stat.first].first;
+
+        // adding the substat to the rune
+        rune[stat_count].first = stat.first;
+        rune[stat_count].second = stat.second;
+    }
     return;
 }
 
@@ -160,28 +185,11 @@ int main()
     input_file.close();
 
     // length of the vector containing stat names
-    //int length = rune_statnames.size();
-
-    /*int i;
-    for (auto i = rune_statnames.begin(); i != rune_statnames.end();++i)
-    {
-        cout << "Stat: " << *i << ", min: " << rune_vals[*i].first << ", max: " << rune_vals[*i].second << endl;
-    }*/
-
-
-
-
-
-
-    
+    int length = rune_statnames.size();
 
     // creates a rune
-   /* rune = rune_generator(length); // STILL NEED TO TEST RUNE GENERATOR
+    rune_generator(length); 
+ 
 
-    int i;
-    for (auto i = rune.begin(); i != rune.end(); ++i){
-        cout << "Stat name: " << *i.first << "\tStat value: " << *i.second << endl;
-    }
-
-    return 0;*/
+    return 0;
 }
