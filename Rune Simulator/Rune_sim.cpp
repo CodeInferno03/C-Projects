@@ -190,11 +190,12 @@ int Rune_powerup(int quad_count)
         // picks a substat from 1 to 4
         value = rand() % 4 + 1;
 
-        // checks
+        // checks if the same stat was rolled each time. If it was not, then leave the loop
+        // if the same stat was quad rolled, then increase the quad count
         val_count[powerup-1] = value;
         if (powerup-1 > 0){
             if (val_count[powerup-1] != val_count[powerup-2]) break;
-        }
+        } else if (powerup == 4) quad_count++;
 
         // finds the substat in the rune so that the name can be obtained
         stat_name = rune[value+1].first;
@@ -204,8 +205,7 @@ int Rune_powerup(int quad_count)
         stat_val = rand() % val_range + rune_vals[stat_name].first;
 
         // adds the found value to the stat
-        rune[value+1].second = rune[value+1].second + stat_val; 
-        
+        rune[value+1].second = rune[value+1].second + stat_val;
     }
 
 
