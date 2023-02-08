@@ -12,7 +12,7 @@ Follow up: wonder if the speeds will arrange as a bell curve??
 #include <fstream>
 #include <unordered_map>
 #include <random>
-#include <iterator>
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -194,7 +194,7 @@ int Rune_powerup(int quad_count)
         // if the same stat was quad rolled, then increase the quad count
         val_count[powerup-1] = value;
         if (powerup-1 > 0){
-            if (val_count[powerup-1] != val_count[powerup-2]) break;
+            if (val_count[powerup-1] != val_count[powerup-2]) break; 
         } else if (powerup == 4) quad_count++;
 
         // finds the substat in the rune so that the name can be obtained
@@ -206,6 +206,7 @@ int Rune_powerup(int quad_count)
 
         // adds the found value to the stat
         rune[value+1].second = rune[value+1].second + stat_val;
+        
     }
 
 
@@ -219,11 +220,25 @@ int main()
     
     int quad_count = 0; // tracks the number of quad speed runes
     int rune_count = 0; // tracks the total number of runes
-    
+    int default_roll_count = 10000; // the default number of runes to roll
     /*
     Eventually, over here, add a part that allows people to choose what stat they want to roll, and how many trials of it
     they want
     */
+    // A user input that asks how many runes they would like to roll, by default set to 10,000
+    // if they type -[number] it sets that as the new default
+    string str_num_roll; // initially saves as string
+    int num_roll; // eventually saves as number
+    cout << "How many runes would you like to roll?(If you would like to roll the default 10,000 type d)\n";
+    cin >> str_num_roll;
+
+    // FINISH
+    /*try{
+        if (str_num_roll[0] != 'd' || str_num_roll.length() > 1)
+    }*/
+
+
+
 
     // the input file
     ifstream input_file;
@@ -236,15 +251,23 @@ int main()
 
     input_file.close();
 
+    
+
+
     // length of the vector containing stat names
     int length = rune_statnames.size();
 
     // creates a rune
     rune_generator(length); 
 
-    for (int x = 0; x < 6; x++)
+    /*for (int x = 0; x < 6; x++)
         cout << rune[x].first << ": " << rune[x].second << endl;
- 
+    
+    int quad_check = Rune_powerup(quad_count);
+
+    for (int i = 0; i < 6; i++)
+        cout << rune[i].first << ": " << rune[i].second << endl;
+    cout << "quad check: " << quad_check << endl;*/
 
     return 0;
 }
