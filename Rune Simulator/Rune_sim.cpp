@@ -62,111 +62,119 @@ main stat, it cannot have the same as a substat. Also, all the mainstats are sto
 Variables:
 length - contains the length of the vector containing the all possible stat names
 */
-void rune_generator(int length)
+void Rune_generator(int length)
 {
     string mainstat; // main stat of the rune
     pair<string, int> stat; // saves each of the 4 substats and the slot/mainstat one after another
-    int slot = rand() % 7 + 1; // picks the rune's slot
+    int speed_check = 0; // checks if speed is a substat
 
     pair<string, string> restricted; // restricted substats for certain slots
 
     // the condition for random to generate correctly
     int val = length - 1;
 
-    // storing the rune slot into the rune array
-    stat.first = "slot";
-    stat.second = slot;
-    rune[0] = stat;
-
-    /*
-    Selects the main stat of the rune based on the slot.
-    There are certain restricted main stats based on the slots, and restricted tracks those for slots 1,3,5
-    for the rest we keep picking until we get a viable one
-    */
-    switch(slot)
+    while (speed_check < 1)
     {
-        case 1:
-            mainstat = "ATK";
-            restricted.first = "DEF";
-            restricted.second = "DEF%";
-            break;
+        int slot = rand() % 7 + 1; // picks the rune's slot
+        // storing the rune slot into the rune array
+        stat.first = "slot";
+        stat.second = slot;
+        rune[0] = stat;
 
-        case 2:
-            // this portion picks the correct possible mainstat for a slot 2 rune. 
-            // there is similar code for slots 4 and 6, as they have different restrictions
-            while (1){
-                // randomly picks the substat
-                mainstat = rune_statnames.at(rand() % val);
-                if (mainstat == "Accuracy" || mainstat == "Resistance" || mainstat == "CRI_RATE"
-                || mainstat == "CRI_DMG")
-                    continue;
-                else break;
-            }
-            break;
-        
-        case 3:
-            mainstat = "DEF";
-            restricted.first = "ATK";
-            restricted.second = "ATK%";
-            break;
-        
-        case 4:
-            while (1){
-                mainstat = rune_statnames.at(rand() % val);
-                if (mainstat == "SPD" || mainstat == "Accuracy" || mainstat == "Resistance")
-                    continue;
-                else break;
-            }
-            break;
-        
-        case 5:
-            mainstat = "HP";
-            break;
-        
-        case 6:
-            while (1){
-                mainstat = rune_statnames.at(rand() % val);
-                if (mainstat == "SPD" || mainstat == "CRI_RATE" || mainstat == "CRI_DMG")
-                    continue;
-                else break;
-            }
-            break;
-        
-        default:
-            cout << "How the hell did this trigger??????\n";
-            break;
-    }
-
-    // adding the main stat to the rune array
-    stat.first = mainstat;
-    stat.second = 0;
-    rune[1] = stat;
-
-    for (int stat_count = 2; stat_count < 6; stat_count++)
-    {   
-        // the range of values from which the substat is picked (max value - min value from the list)
-        int val_range;
-
-        // picks a substat, and keeps picking if it selects a restricted substat or the same as the mainstat
-        while (1)
+        /*
+        Selects the main stat of the rune based on the slot.
+        There are certain restricted main stats based on the slots, and restricted tracks those for slots 1,3,5
+        for the rest we keep picking until we get a viable one
+        */
+        switch(slot)
         {
-            stat.first = rune_statnames.at(rand() % val);
-            if (stat.first == restricted.first || stat.first == restricted.second || 
-            stat.first == mainstat) continue;
-            else break;    
+            case 1:
+                mainstat = "ATK";
+                restricted.first = "DEF";
+                restricted.second = "DEF%";
+                break;
+
+            case 2:
+                // this portion picks the correct possible mainstat for a slot 2 rune. 
+                // there is similar code for slots 4 and 6, as they have different restrictions
+                while (1){
+                    // randomly picks the substat
+                    mainstat = rune_statnames.at(rand() % val);
+                    if (mainstat == "Accuracy" || mainstat == "Resistance" || mainstat == "CRI_RATE"
+                    || mainstat == "CRI_DMG")
+                        continue;
+                    else break;
+                }
+                break;
+        
+            case 3:
+                mainstat = "DEF";
+                restricted.first = "ATK";
+                restricted.second = "ATK%";
+                break;
+        
+            case 4:
+                while (1){
+                    mainstat = rune_statnames.at(rand() % val);
+                    if (mainstat == "SPD" || mainstat == "Accuracy" || mainstat == "Resistance")
+                        continue;
+                    else break;
+                }
+                break;
+        
+            case 5:
+                mainstat = "HP";
+                break;
+        
+            case 6:
+                while (1){
+                    mainstat = rune_statnames.at(rand() % val);
+                    if (mainstat == "SPD" || mainstat == "CRI_RATE" || mainstat == "CRI_DMG")
+                        continue;
+                    else break;
+                }
+                break;
+        
+            default:
+                cout << "How the hell did this trigger??????\n";
+                break;
         }
 
-        // picks the value of substat
-        val_range = rune_vals[stat.first].second - rune_vals[stat.first].first + 1;
-        stat.second = rand() % val_range + rune_vals[stat.first].first;
+        // adding the main stat to the rune array
+        stat.first = mainstat;
+        stat.second = 0;
+        rune[1] = stat;
 
-        // if SPD is a substat, then increment speed check
-        if (stat.first == "SPD") speed_check++;
+        for (int stat_count = 2; stat_count < 6; stat_count++)
+        {
+            // if the main stat is speed, then it's pointless to roll it for spd
+            if (mainstat == "SPD") break;
 
-        // adding the substat to the rune
-        rune[stat_count].first = stat.first;
-        rune[stat_count].second = stat.second;
+            // the range of values from which the substat is picked (max value - min value from the list)
+            int val_range;
+
+            // picks a substat, and keeps picking if it selects a restricted substat or the same as the mainstat
+            while (1)
+            {
+                stat.first = rune_statnames.at(rand() % val);
+                if (stat.first == restricted.first || stat.first == restricted.second || 
+                stat.first == mainstat) continue;
+                else break;    
+            }
+
+            // picks the value of substat
+            val_range = rune_vals[stat.first].second - rune_vals[stat.first].first + 1;
+            stat.second = rand() % val_range + rune_vals[stat.first].first;
+
+            // if SPD is a substat, then increment speed check, else keep the loop running
+            if (stat.first == "SPD") speed_check++;
+
+            // adding the substat to the rune
+            rune[stat_count].first = stat.first;
+            rune[stat_count].second = stat.second;
+        }
     }
+    
 }
 
 /*
@@ -213,6 +221,14 @@ int Rune_powerup(int quad_count)
     return quad_count;
 }
 
+/*
+Function to print the runes to a .csv file so that python can retrieve the data
+*/
+void print_rune()
+{
+
+}
+
 int main()
 {   
     string filename = "Rune_stats.txt";
@@ -229,8 +245,8 @@ int main()
     // if they type -[number] it sets that as the new default
     string str_num_roll; // initially saves as string
     int num_roll; // eventually saves as number
-    cout << "How many runes would you like to roll?(If you would like to roll the default 10,000 type d)\n";
-    cin >> str_num_roll;
+    /*cout << "How many runes would you like to roll?(If you would like to roll the default 10,000 type d)\n";
+    cin >> str_num_roll;*/
 
     // FINISH
     /*try{
@@ -238,7 +254,7 @@ int main()
     }*/
 
 
-
+    
 
     // the input file
     ifstream input_file;
@@ -251,23 +267,30 @@ int main()
 
     input_file.close();
 
-    
+    // the output file
+    ofstream output_file;
 
+    // opening the .csv file 
+    output_file.open("Runes.csv");
 
     // length of the vector containing stat names
     int length = rune_statnames.size();
 
-    // creates a rune
-    rune_generator(length); 
+    num_roll = default_roll_count;
+    // finish this loop and print result to .csv
+    for (int reps = 0; reps < num_roll; reps++)
+    {   
+        // creates a rune
+        Rune_generator(length);
 
-    /*for (int x = 0; x < 6; x++)
-        cout << rune[x].first << ": " << rune[x].second << endl;
+        // checks if the rune is a quad roll
+        quad_count = Rune_powerup(quad_count);
+    }
+
+    // cloing the csv
+    output_file.close();
+
     
-    int quad_check = Rune_powerup(quad_count);
-
-    for (int i = 0; i < 6; i++)
-        cout << rune[i].first << ": " << rune[i].second << endl;
-    cout << "quad check: " << quad_check << endl;*/
 
     return 0;
 }
