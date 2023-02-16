@@ -6,5 +6,8 @@ import pandas as pd
 textfile = "save_text.json"
 
 # the dict that prints to the json file
-json_dict = dict()
+overall_dict = dict()
+
+
+
 
