@@ -223,10 +223,26 @@ int Rune_powerup(int quad_count)
 
 /*
 Function to print the runes to a .csv file so that python can retrieve the data
-*/
-void print_rune()
-{
+Formatting:
+slot, mainstat, stat1-[value], stat2-[value], stat3-[value], stat4-[value]
 
+mainstat shouldn't matter since it's always 0 anyway
+the only runes that will be printed will be quadrolls...or should I make it such that every rune has
+a denoter explaining whether or not it is a quad roll speed
+e.g.
+slot, mainstat, stat1-[value], stat2-[value], stat3-[value], stat4-[value], [denoter]
+1 - quad speed
+0 - not quad speed
+
+Variables:
+outfile - the file we're printing to
+is_quad - a check of whether the current rune is a speed quad
+*/
+void print_rune(ofstream& outfile, int is_quad)
+{
+    for (int type = 0; type < 7; type++){
+
+    }
 }
 
 int main()
