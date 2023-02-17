@@ -28,8 +28,9 @@ Array format ([element number] - value):
 [0] - Slot
 [1] - Main stat
 [2] ... [5] - Substats
+[6] - denotes if it's a speed quad
 */
-pair<string, int> rune[6]; 
+pair<string, int> rune[7]; 
 
 // a condition to check if SPD is a substat in the rune or not
 int speed_check = 0;
@@ -191,6 +192,7 @@ int Rune_powerup(int quad_count)
     int stat_val; // the final value of the selected substat so it can be powered up
     string stat_name; // the name of the substat to be powered up, so it can be accessed from the list
     int val_count[4]; // checks which substat was found each time to check for quads
+    int speedcheck = 0; // checks if the selected substat was speed, affects the 7th element of the rune array
 
     // loop to find and add the substat to the rune
     for (int powerup = 1; powerup <= 4; powerup++)
@@ -240,8 +242,8 @@ is_quad - a check of whether the current rune is a speed quad
 */
 void print_rune(ofstream& outfile, int is_quad)
 {
-    for (int type = 0; type < 7; type++){
-
+    for (int type = 0; type < 6; type++){
+        outfile << 
     }
 }
 
